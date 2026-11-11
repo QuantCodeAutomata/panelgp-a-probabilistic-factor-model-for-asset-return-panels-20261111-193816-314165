@@ -60,8 +60,8 @@ def run(full: bool = False, tag: str = "exp4"):
         universe_size, n_characteristics, n_context,
     )
     all_months = panel.months
-    train_months = months_between(panel, train_start, train_end)
-    eval_months = months_between(panel, eval_start, eval_end)
+    train_months = panel.train_months
+    eval_months = panel.eval_months
     print(f"[panel] months={len(all_months)} train={len(train_months)} eval={len(eval_months)}")
 
     # --- Fixed training ---

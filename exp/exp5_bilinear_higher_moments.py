@@ -91,7 +91,7 @@ def run(full: bool = False, tag: str = "exp5"):
         universe_size, n_characteristics, n_context,
     )
     all_months = panel.months
-    eval_months = months_between(panel, eval_start, eval_end)
+    eval_months = panel.eval_months
 
     # Same cache key convention as exp/exp4_rolling_and_trading_costs.py so the
     # rolling PanelGP forecasts computed there are reused here without refitting.

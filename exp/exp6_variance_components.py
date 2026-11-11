@@ -78,7 +78,7 @@ def run(full: bool = False, tag: str = "exp6"):
         universe_size, n_characteristics, n_context,
     )
     all_months = panel.months
-    eval_months = months_between(panel, eval_start, eval_end)
+    eval_months = panel.eval_months
 
     cache_key = f"exp4_{universe_size}_{n_factors}_{n_epochs}_{n_seeds}_{window_months}"
     rolling_pg_seeds = cached_rolling_panelgp(

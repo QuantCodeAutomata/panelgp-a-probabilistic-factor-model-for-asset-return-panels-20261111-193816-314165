@@ -65,11 +65,11 @@ def run(full: bool = False, h: int | None = None, seeds: int | None = None, tag:
         bars, train_start, train_end, valid_start, valid_end, eval_start, eval_end,
         universe_size, n_characteristics, n_context,
     )
-    print(f"[panel] months={len(panel.months)} train={len(months_between(panel, train_start, train_end))} "
-          f"eval={len(months_between(panel, eval_start, eval_end))} universe={len(panel.tickers)}")
+    print(f"[panel] months={len(panel.months)} train={len(panel.train_months)} "
+          f"eval={len(panel.eval_months)} universe={len(panel.tickers)}")
 
-    train_months = months_between(panel, train_start, train_end)
-    eval_months = months_between(panel, eval_start, eval_end)
+    train_months = panel.train_months
+    eval_months = panel.eval_months
 
     all_series = {}   # name -> {"portfolio": aggregated portfolio arrays, "scalar": averaged metrics}
     monthly_logscore = {}
