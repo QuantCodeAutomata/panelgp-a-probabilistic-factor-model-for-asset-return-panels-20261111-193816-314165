@@ -1,0 +1,70 @@
+{
+  "config": {
+    "full": false,
+    "n_factors": 5,
+    "n_seeds": 1
+  },
+  "spearman_V_beta_vs_monthly_sq_error": 0.3526875699888018,
+  "spearman_V_phi_vs_sq_error_within_month": 0.17482868048142028,
+  "average_components": {
+    "V_phi": 0.00019310966543564036,
+    "V_beta": 0.0019257838435331421,
+    "tr_DbDf": 0.0005860954621634843,
+    "sigma_r2": 0.0012645615726499804
+  },
+  "temporal_quintiles_by_V_beta": [
+    {
+      "quintile": 1,
+      "realized_rms_error": 0.06589316492888761,
+      "predicted_risk": 0.0569297946332772
+    },
+    {
+      "quintile": 2,
+      "realized_rms_error": 0.0648433269664609,
+      "predicted_risk": 0.06526754701811509
+    },
+    {
+      "quintile": 3,
+      "realized_rms_error": 0.08431823273405102,
+      "predicted_risk": 0.06876751252501206
+    },
+    {
+      "quintile": 4,
+      "realized_rms_error": 0.07621272489655802,
+      "predicted_risk": 0.06986689995098293
+    },
+    {
+      "quintile": 5,
+      "realized_rms_error": 0.09384679403882848,
+      "predicted_risk": 0.07833150589403251
+    }
+  ],
+  "cross_sectional_quintiles_by_V_phi": [
+    {
+      "quintile": 1,
+      "realized_rms_error": 0.058274754496576306,
+      "predicted_risk": 0.06482168323650553
+    },
+    {
+      "quintile": 2,
+      "realized_rms_error": 0.06423962781965976,
+      "predicted_risk": 0.06644525122794524
+    },
+    {
+      "quintile": 3,
+      "realized_rms_error": 0.07625885243842499,
+      "predicted_risk": 0.06784357587639572
+    },
+    {
+      "quintile": 4,
+      "realized_rms_error": 0.08308009437034793,
+      "predicted_risk": 0.06926564235337261
+    },
+    {
+      "quintile": 5,
+      "realized_rms_error": 0.1001565741501137,
+      "predicted_risk": 0.07231688245032396
+    }
+  ],
+  "runtime_seconds": 4.745501756668091
+}
