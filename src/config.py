@@ -77,7 +77,7 @@ APP_H_GRID_RUN = [1, 2, 3, 5, 8]       # reduced grid of factor counts for Exper
 APP_N_CHARACTERISTICS_RUN = 16         # price/volume-derived characteristics (see data_loader)
 APP_N_CONTEXT_RUN = 4                  # price-derived context variables (see data_loader)
 APP_N_INDUCING_RUN = 48                # reduced inducing inputs per component
-APP_N_EPOCHS_RUN = 150                 # reduced training epochs
+APP_N_EPOCHS_RUN = 60                  # reduced training epochs (scalable count)
 APP_TRAIN_START_RUN = "2005-01-01"
 APP_TRAIN_END_RUN = "2014-12-31"       # 120 months, proportional to the paper's 360
 APP_VALID_START_RUN = "2015-01-01"
@@ -85,7 +85,7 @@ APP_VALID_END_RUN = "2016-12-31"
 APP_EVAL_START_RUN = "2017-01-01"
 APP_EVAL_END_RUN = "2024-12-31"
 APP_WINDOW_MONTHS_RUN = 120
-APP_N_SEEDS_RUN = 2                    # reduced optimization seeds (scalable count)
+APP_N_SEEDS_RUN = 1                    # reduced optimization seeds (scalable count)
 APP_UNIVERSE_SIZE_PAPER = "465-497 (full historical S&P 500 membership)"
 APP_UNIVERSE_SIZE_RUN = 60             # tickers, selected by average dollar volume
 
