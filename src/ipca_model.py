@@ -2,8 +2,8 @@
 2019-style alternating least squares), used as in paper Section 5.2 /
 Appendix D: "Both estimated by alternating least squares."
 
-Custom implementation: Context7 lookup found no maintained library offering
-this exact IPCA ALS estimator with the paper's with/without-intercept
+Custom implementation: no maintained library offers this exact IPCA
+alternating-least-squares estimator with the paper's with/without-intercept
 variants, so it is implemented directly from the normal equations of the
 bilinear characteristic-managed-portfolio model.
 """
