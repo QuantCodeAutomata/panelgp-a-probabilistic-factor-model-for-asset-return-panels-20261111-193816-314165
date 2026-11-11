@@ -168,6 +168,11 @@ def predict_month(fit: FittedPanelGP, X_month: np.ndarray, c_t: np.ndarray) -> d
     return {
         "mu": mu, "Sigma": Sigma, "V0": V0, "V_phi": V_phi,
         "V_beta": V_beta, "tr_DbDf": tr_DbDf, "sigma_r2": fit.sigma_r2,
+        # Raw per-stock state for the bilinear CGF of Appendix B.3 (Experiment 5):
+        # m_beta (H,N), m_phi (H,), SBB_tilde (H,H,N,N) diagonal-in-j blocks already
+        # include tau_beta, SFF_tilde (H,H) includes rho, SBP (H,H,N).
+        "m_beta": m_beta, "m_phi": m_phi, "SBB_tilde": SBB_tilde, "SFF_tilde": SFF_tilde,
+        "SBP": SBP,
     }
 
 

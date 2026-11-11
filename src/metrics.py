@@ -26,17 +26,24 @@ def predictive_r2(residuals: np.ndarray, realized: np.ndarray) -> float:
     return float(1.0 - np.sum(residuals ** 2) / np.sum(realized ** 2))
 
 
-def monthly_rank_correlation(pred_by_month: list[np.ndarray], real_by_month: list[np.ndarray]) -> float:
-    """Average monthly Spearman rank correlation between predicted and
-    realized returns (paper Section 5.2)."""
+def monthly_rank_correlation_series(pred_by_month: list[np.ndarray], real_by_month: list[np.ndarray]) -> np.ndarray:
+    """Monthly Spearman rank correlation between predicted and realized
+    returns, one value per month (paper Section 5.2)."""
     vals = []
     for p, r in zip(pred_by_month, real_by_month):
         if len(p) < 2:
+            vals.append(np.nan)
             continue
         rho, _ = spearmanr(p, r)
-        if np.isfinite(rho):
-            vals.append(rho)
-    return float(np.mean(vals))
+        vals.append(rho)
+    return np.array(vals, dtype=float)
+
+
+def monthly_rank_correlation(pred_by_month: list[np.ndarray], real_by_month: list[np.ndarray]) -> float:
+    """Average monthly Spearman rank correlation between predicted and
+    realized returns (paper Section 5.2)."""
+    vals = monthly_rank_correlation_series(pred_by_month, real_by_month)
+    return float(np.nanmean(vals))
 
 
 def gaussian_log_score(resid: np.ndarray, Sigma: np.ndarray) -> float:
