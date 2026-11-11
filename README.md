@@ -62,11 +62,11 @@ python -m pytest                            # include the market-data tests
                                              # (needs DATALOADER_API_KEY/MASSIVE_API_KEY)
 
 python -m exp.exp1_simulation_recovery
-python -m exp.exp2_kernel_comparison
-python -m exp.exp3_factor_count_sweep
-python -m exp.exp4_rolling_and_costs
-python -m exp.exp5_higher_moments
-python -m exp.exp6_variance_calibration
+python -m exp.exp2_fixed_kernel_comparison
+python -m exp.exp3_factor_dimension_sweep
+python -m exp.exp4_rolling_and_trading_costs
+python -m exp.exp5_bilinear_higher_moments
+python -m exp.exp6_variance_components
 ```
 
 Each experiment script can also be run with `--full` to select the paper's
