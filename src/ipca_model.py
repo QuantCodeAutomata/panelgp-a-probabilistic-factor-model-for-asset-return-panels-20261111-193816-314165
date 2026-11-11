@@ -57,7 +57,8 @@ def fit_ipca(returns_by_month: list[np.ndarray], chars_by_month: list[np.ndarray
     if with_intercept:
         sum_XtX = sum(XtX)
         sum_Xtr = sum(Xtr)
-        gamma_alpha = np.linalg.solve(sum_XtX + 1e-8 * np.eye(P1), sum_Xtr)
+        scale0 = max(float(np.trace(sum_XtX)) / max(P1, 1), 1e-8)
+        gamma_alpha = np.linalg.lstsq(sum_XtX + 1e-8 * scale0 * np.eye(P1), sum_Xtr, rcond=None)[0]
 
     factors = np.zeros((T, H))
     prev_gamma = gamma.copy()
@@ -66,8 +67,9 @@ def fit_ipca(returns_by_month: list[np.ndarray], chars_by_month: list[np.ndarray
         for t in range(T):
             resid = returns_by_month[t] - (X_list[t] @ gamma_alpha if with_intercept else 0.0)
             W = X_list[t] @ gamma  # (N_t, H)
-            WtW = W.T @ W + 1e-10 * np.eye(H)
-            factors[t] = np.linalg.solve(WtW, W.T @ resid)
+            scale = max(float(np.trace(W.T @ W)) / max(H, 1), 1e-8)
+            WtW = W.T @ W + 1e-6 * scale * np.eye(H)
+            factors[t] = np.linalg.lstsq(WtW, W.T @ resid, rcond=None)[0]
 
         # Gamma-step (and gamma_alpha-step): pooled normal equations, accumulated per month.
         dim = P1 * H + (P1 if with_intercept else 0)
@@ -84,7 +86,8 @@ def fit_ipca(returns_by_month: list[np.ndarray], chars_by_month: list[np.ndarray
                 AtA[P1 * H:, :P1 * H] += block_ga.T
                 AtA[P1 * H:, P1 * H:] += XtX[t]
                 Atr[P1 * H:] += Xtr[t]
-        theta = np.linalg.solve(AtA + 1e-8 * np.eye(dim), Atr)
+        diag_scale = max(float(np.trace(AtA)) / max(dim, 1), 1e-8)
+        theta = np.linalg.lstsq(AtA + 1e-8 * diag_scale * np.eye(dim), Atr, rcond=None)[0]
         gamma = theta[:P1 * H].reshape(P1, H)
         if with_intercept:
             gamma_alpha = theta[P1 * H:]
