@@ -20,7 +20,7 @@ import numpy as np
 
 import src.config as cfg
 from data.data_loader import load_ohlcv
-from src.bilinear import gaussian_log_density, log_density, pairing_matrix
+from src.bilinear import build_states, gaussian_log_density, log_density, pairing_matrix
 from src.pipeline import cached_rolling_panelgp, load_universe_and_panel, rolling_panelgp_forecasts
 from src.universe import CANDIDATE_TICKERS
 
@@ -38,22 +38,17 @@ def per_observation_gain(records: list, H: int) -> dict:
     A = pairing_matrix(H)
     gains, abs_z, months = [], [], []
     for rec in records:
-        m_beta = rec["m_beta"]            # (N, H), in scaled training units
-        m_phi = rec["m_phi"].reshape(-1)  # (H,)
-        SBB = rec["SBB_tilde"]            # (H, H, N)
-        SFF = rec["SFF_tilde"]            # (H, H)
-        SBP = rec["SBP"]                  # (H, H, N)
+        m_beta = rec["m_beta"].T           # (N, H): predict_month returns (H, N)
+        m_phi = rec["m_phi"].reshape(-1)   # (H,)
+        SBB = rec["SBB_tilde"]             # (H, H, N, N); diagonal-in-j blocks needed
+        SBB_jj = np.einsum("hgjj->hgj", SBB)  # (H, H, N)
+        SFF = rec["SFF_tilde"]             # (H, H)
+        SBP = rec["SBP"]                   # (H, H, N), already per-stock
         s_r = rec["s_r"]
         r_scaled = rec["r"] / s_r
         mu = rec["mu"] / s_r
         var = np.clip(np.diag(rec["Sigma"]), 1e-12, None) / s_r ** 2
-        N = m_beta.shape[0]
-        m_star = np.concatenate([m_beta, np.broadcast_to(m_phi, (N, H))], axis=1)
-        S_star = np.zeros((N, 2 * H, 2 * H))
-        S_star[:, :H, :H] = np.moveaxis(SBB, -1, 0)
-        S_star[:, H:, H:] = SFF[None, :, :]
-        S_star[:, :H, H:] = np.moveaxis(SBP, -1, 0)
-        S_star[:, H:, :H] = np.moveaxis(SBP, -1, 0).transpose(0, 2, 1)
+        m_star, S_star = build_states(m_beta, m_phi, SBB_jj, SFF, SBP)
         sigma_r2_scaled = rec["sigma_r2"] / s_r ** 2
         log_p_bil = log_density(r_scaled, m_star, S_star, A, sigma_r2_scaled) - np.log(s_r)
         log_p_gauss = gaussian_log_density(r_scaled, mu, var) - np.log(s_r)
