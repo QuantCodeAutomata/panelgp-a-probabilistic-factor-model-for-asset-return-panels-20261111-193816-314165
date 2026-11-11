@@ -48,6 +48,7 @@ def per_observation_gain(records: list, H: int) -> dict:
         r_scaled = rec["r"] / s_r
         mu = rec["mu"] / s_r
         var = np.clip(np.diag(rec["Sigma"]), 1e-12, None) / s_r ** 2
+        N = m_beta.shape[0]
         m_star, S_star = build_states(m_beta, m_phi, SBB_jj, SFF, SBP)
         sigma_r2_scaled = rec["sigma_r2"] / s_r ** 2
         log_p_bil = log_density(r_scaled, m_star, S_star, A, sigma_r2_scaled) - np.log(s_r)
@@ -135,10 +136,12 @@ def run(full: bool = False, tag: str = "exp5"):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import pandas as pd
+    month_ts = pd.PeriodIndex(unique_months).to_timestamp()
     fig, ax = plt.subplots(figsize=(8, 4))
     trailing = np.convolve(monthly_mean, np.ones(12) / 12, mode="valid")
-    ax.plot(unique_months, monthly_mean, alpha=0.4, label="monthly mean")
-    ax.plot(unique_months[11:], trailing, label="trailing 12-month average")
+    ax.plot(month_ts, monthly_mean, alpha=0.4, label="monthly mean")
+    ax.plot(month_ts[11:], trailing, label="trailing 12-month average")
     ax.set_xlabel("month"); ax.set_ylabel("log-score gain")
     ax.set_title("Bilinear vs. Gaussian log-score gain (Exp. 5, Sec. 6.6)")
     ax.legend()
